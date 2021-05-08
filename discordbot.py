@@ -66,7 +66,10 @@ async def on_voice_state_update(member, before, after):
         if member.bot:
             await client.change_presence(activity=discord.Game(name=f"{prefix}接続 | {len(client.voice_clients)}/{len(client.guilds)}サーバー"))
         else:
-            if member.guild.voice_client is not None:
+            if member.guild.voice_client is None:
+                await asyncio.sleep(0.5)
+                await after.channel.connect()
+            else:
                 if member.guild.voice_client.channel is after.channel:
                     text = member.name + 'さんが入室しました'
                     s_quote = urllib.parse.quote(text)
