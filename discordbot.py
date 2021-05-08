@@ -86,7 +86,7 @@ async def on_voice_state_update(member, before, after):
                     if len(member.guild.voice_client.channel.members) == 1:
                         await asyncio.sleep(0.5)
                         await member.guild.voice_client.disconnect()
-                    else:
+                    elif after.channel is None:
                         text = member.name + 'さんが退室しました'
                         s_quote = urllib.parse.quote(text)
                         mp3url = "http://translate.google.com/translate_tts?ie=UTF-8&q=" + s_quote + "&tl=ja&client=tw-ob"
