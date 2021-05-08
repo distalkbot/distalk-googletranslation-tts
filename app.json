@@ -1,6 +1,6 @@
 {
-  "name": "discordpy-startup",
-  "description": "Herokuでdiscord.pyを始めるテンプレート",
-  "repository": "https://github.com/DiscordBotPortalJP/discordpy-startup",
+  "name": "distalk",
+  "description": "Discord TTS on heroku",
+  "repository": "https://github.com/distalkbot/distalk",
   "keywords": ["python", "discord", "bot"]
 }
