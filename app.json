@@ -2,5 +2,13 @@
   "name": "distalk",
   "description": "Discord TTS on heroku",
   "repository": "https://github.com/distalkbot/distalk",
-  "keywords": ["python", "discord", "bot"]
+  "keywords": ["python", "discord", "bot"],
+  "buildpacks": [
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+    },
+    {
+      "url": "https://github.com/Crazycatz00/heroku-buildpack-libopus.git"
+    }
+  ]
 }
