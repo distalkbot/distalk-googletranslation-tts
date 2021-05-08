@@ -6,7 +6,7 @@ import traceback
 import urllib.parse
 import re
 
-prefix = os.getenv('DISCORD_BOT_PREFIX', default='👄')
+prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 client = commands.Bot(command_prefix=prefix)
 token = os.environ['DISCORD_BOT_TOKEN']
 
