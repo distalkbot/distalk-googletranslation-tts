@@ -38,6 +38,13 @@ async def on_message(message):
     else:
         if message.guild.voice_client:
             text = message.content
+            pattern = r'^<@\d*>'
+            if re.match(pattern, text):
+                match = re.search(r'^<@(\d*)>', text)
+                uid = match.group(1)
+                user = await client.fetch_user(uid)
+                username = user.name + '、'
+                text = re.sub(pattern, username, text)
             pattern = r'.*(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
             text = re.sub(pattern, '画像', text)
             pattern = r"https?://[\w/:%#\$&\?\(\)~\.=\+\-]+"
