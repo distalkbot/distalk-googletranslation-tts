@@ -12,7 +12,7 @@ token = os.environ['DISCORD_BOT_TOKEN']
 
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Game(name=f"{prefix}接続 | 起動完了"))
+    await client.change_presence(activity=discord.Game(name=f"{prefix}ヘルプ | 起動完了"))
 
 @client.command()
 async def 接続(ctx):
@@ -73,7 +73,7 @@ async def on_message(message):
 async def on_voice_state_update(member, before, after):
     if before.channel is None:
         if member.bot:
-            await client.change_presence(activity=discord.Game(name=f"{prefix}接続 | {len(client.voice_clients)}/{len(client.guilds)}サーバー"))
+            await client.change_presence(activity=discord.Game(name=f"{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー"))
         else:
             if member.guild.voice_client is None:
                 await asyncio.sleep(0.5)
@@ -88,7 +88,7 @@ async def on_voice_state_update(member, before, after):
                     member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
     elif after.channel is None:
         if member.bot:
-            await client.change_presence(activity=discord.Game(name=f"{prefix}接続 | {len(client.voice_clients)}/{len(client.guilds)}サーバー"))
+            await client.change_presence(activity=discord.Game(name=f"{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー"))
         else:
             if member.guild.voice_client.channel is before.channel:
                 if len(member.guild.voice_client.channel.members) == 1:
@@ -108,6 +108,16 @@ async def on_voice_state_update(member, before, after):
                 await member.guild.voice_client.disconnect()
                 await asyncio.sleep(0.5)
                 await after.channel.connect()
+
+@client.command()
+async def ヘルプ(ctx):
+    message = '''◆◇◆おしゃべりイカの使い方◆◇◆
+        イカの絵文字🦑＋コマンドで命令できます。
+        （自動入退室機能があるため、基本的には使用しません）
+        
+        🦑接続：ボイスチャンネルに接続します。
+        🦑切断：ボイスチャンネルから切断します。'''
+    await ctx.send(message)
 
 @client.event
 async def on_command_error(ctx, error):
