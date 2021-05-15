@@ -46,7 +46,7 @@ async def on_message(message):
             if text[-1:] == "w" or text[-1:] == "W" or text[-1:] == "ｗ" or text[-1:] == "W":
                 while text[-2:-1] == "w" or text[-2:-1] == "W" or text[-2:-1] == "ｗ" or text[-2:-1] == "W":
                     text = text[:-1]
-                text = text[:-1] + '、笑'
+                text = text[:-1] + '、ワラ'
             if len(text) < 100:
                 s_quote = urllib.parse.quote(text)
                 mp3url = "http://translate.google.com/translate_tts?ie=UTF-8&q=" + s_quote + "&tl=ja&client=tw-ob"
