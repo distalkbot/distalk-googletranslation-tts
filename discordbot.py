@@ -111,16 +111,6 @@ async def on_voice_state_update(member, before, after):
                 await asyncio.sleep(0.5)
                 await after.channel.connect()
 
-@client.command()
-async def ヘルプ(ctx):
-    message = '''◆◇◆おしゃべりイカの使い方◆◇◆
-イカの絵文字🦑＋コマンドで命令できます。
-（自動入退室機能があるため、基本的には使用しません）
-
-🦑接続：ボイスチャンネルに接続します。
-🦑切断：ボイスチャンネルから切断します。'''
-    await ctx.send(message)
-
 @client.event
 async def on_command_error(ctx, error):
     orig_error = getattr(error, "original", error)
