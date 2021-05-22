@@ -12,7 +12,7 @@ token = os.environ['DISCORD_BOT_TOKEN']
 
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Game(name=f"{prefix}ヘルプ | 0/{len(client.guilds)}サーバー"))
+    await client.change_presence(activity=discord.Game(name=f"0/{len(client.guilds)}サーバー"))
 
 @client.command()
 async def 接続(ctx):
@@ -75,7 +75,7 @@ async def on_message(message):
 async def on_voice_state_update(member, before, after):
     if before.channel is None:
         if member.bot:
-            await client.change_presence(activity=discord.Game(name=f"{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー"))
+            await client.change_presence(activity=discord.Game(name=f"{len(client.voice_clients)}/{len(client.guilds)}サーバー"))
         else:
             if member.guild.voice_client is None:
                 await asyncio.sleep(0.5)
@@ -90,7 +90,7 @@ async def on_voice_state_update(member, before, after):
                     member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
     elif after.channel is None:
         if member.bot:
-            await client.change_presence(activity=discord.Game(name=f"{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー"))
+            await client.change_presence(activity=discord.Game(name=f"{len(client.voice_clients)}/{len(client.guilds)}サーバー"))
         else:
             if member.guild.voice_client.channel is before.channel:
                 if len(member.guild.voice_client.channel.members) == 1:
