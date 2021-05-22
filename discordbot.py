@@ -12,7 +12,7 @@ token = os.environ['DISCORD_BOT_TOKEN']
 
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Game(name=f"{prefix}ヘルプ | 起動完了"))
+    await client.change_presence(activity=discord.Game(name=f"{prefix}ヘルプ | 0/{len(client.guilds)}サーバー"))
 
 @client.command()
 async def 接続(ctx):
@@ -69,7 +69,6 @@ async def on_message(message):
                 await message.channel.send('100文字以上は読み上げできません。')
         else:
             pass
-
     await client.process_commands(message)
 
 @client.event
