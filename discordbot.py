@@ -7,8 +7,9 @@ import urllib.parse
 import re
 
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
-client = commands.Bot(command_prefix=prefix)
+lang = os.getenv('DISCORD_BOT_LANG', default='ja')
 token = os.environ['DISCORD_BOT_TOKEN']
+client = commands.Bot(command_prefix=prefix)
 
 @client.event
 async def on_ready():
@@ -61,7 +62,7 @@ async def on_message(message):
                 text = text[:-1] + '、ワラ'
             if len(text) < 100:
                 s_quote = urllib.parse.quote(text)
-                mp3url = "http://translate.google.com/translate_tts?ie=UTF-8&q=" + s_quote + "&tl=ja&client=tw-ob"
+                mp3url = "http://translate.google.com/translate_tts?ie=UTF-8&q=" + s_quote + "&tl=" + lang + "&client=tw-ob"
                 while message.guild.voice_client.is_playing():
                     await asyncio.sleep(0.5)
                 message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
@@ -84,7 +85,7 @@ async def on_voice_state_update(member, before, after):
                 if member.guild.voice_client.channel is after.channel:
                     text = member.name + 'さんが入室しました'
                     s_quote = urllib.parse.quote(text)
-                    mp3url = "http://translate.google.com/translate_tts?ie=UTF-8&q=" + s_quote + "&tl=ja&client=tw-ob"
+                    mp3url = "http://translate.google.com/translate_tts?ie=UTF-8&q=" + s_quote + "&tl=" + lang + "&client=tw-ob"
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
                     member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
@@ -99,7 +100,7 @@ async def on_voice_state_update(member, before, after):
                 else:
                     text = member.name + 'さんが退室しました'
                     s_quote = urllib.parse.quote(text)
-                    mp3url = "http://translate.google.com/translate_tts?ie=UTF-8&q=" + s_quote + "&tl=ja&client=tw-ob"
+                    mp3url = "http://translate.google.com/translate_tts?ie=UTF-8&q=" + s_quote + "&tl=" + lang + "&client=tw-ob"
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
                     member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
