@@ -38,7 +38,7 @@ async def 切断(ctx):
 
 @client.event
 async def on_message(message):
-    if message.content.startswith('👄'):
+    if message.content.startswith(prefix):
         pass
     else:
         if message.guild.voice_client:
