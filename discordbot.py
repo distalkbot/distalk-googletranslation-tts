@@ -13,7 +13,7 @@ client = commands.Bot(command_prefix=prefix)
 
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Game(name=f"0/{len(client.guilds)}サーバー"))
+    await client.change_presence(activity=discord.Game(name=f'0/{len(client.guilds)}サーバー'))
 
 @client.command()
 async def 接続(ctx):
@@ -53,16 +53,16 @@ async def on_message(message):
                 text = re.sub(pattern, username, text)
             pattern = r'.*(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
             text = re.sub(pattern, '画像', text)
-            pattern = r"https?://[\w/:%#\$&\?\(\)~\.=\+\-]+"
+            pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+'
             text = re.sub(pattern, 'URL', text)
             text = message.author.name + '、' + text
-            if text[-1:] == "w" or text[-1:] == "W" or text[-1:] == "ｗ" or text[-1:] == "W":
-                while text[-2:-1] == "w" or text[-2:-1] == "W" or text[-2:-1] == "ｗ" or text[-2:-1] == "W":
+            if text[-1:] == 'w' or text[-1:] == 'W' or text[-1:] == 'ｗ' or text[-1:] == 'W':
+                while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
                     text = text[:-1]
                 text = text[:-1] + '、ワラ'
             if len(text) < 100:
                 s_quote = urllib.parse.quote(text)
-                mp3url = "http://translate.google.com/translate_tts?ie=UTF-8&q=" + s_quote + "&tl=" + lang + "&client=tw-ob"
+                mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
                 while message.guild.voice_client.is_playing():
                     await asyncio.sleep(0.5)
                 message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
@@ -76,7 +76,7 @@ async def on_message(message):
 async def on_voice_state_update(member, before, after):
     if before.channel is None:
         if member.bot:
-            await client.change_presence(activity=discord.Game(name=f"{len(client.voice_clients)}/{len(client.guilds)}サーバー"))
+            await client.change_presence(activity=discord.Game(name=f'{len(client.voice_clients)}/{len(client.guilds)}サーバー'))
         else:
             if member.guild.voice_client is None:
                 await asyncio.sleep(0.5)
@@ -85,13 +85,13 @@ async def on_voice_state_update(member, before, after):
                 if member.guild.voice_client.channel is after.channel:
                     text = member.name + 'さんが入室しました'
                     s_quote = urllib.parse.quote(text)
-                    mp3url = "http://translate.google.com/translate_tts?ie=UTF-8&q=" + s_quote + "&tl=" + lang + "&client=tw-ob"
+                    mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
                     member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
     elif after.channel is None:
         if member.bot:
-            await client.change_presence(activity=discord.Game(name=f"{len(client.voice_clients)}/{len(client.guilds)}サーバー"))
+            await client.change_presence(activity=discord.Game(name=f'{len(client.voice_clients)}/{len(client.guilds)}サーバー'))
         else:
             if member.guild.voice_client.channel is before.channel:
                 if len(member.guild.voice_client.channel.members) == 1:
@@ -100,7 +100,7 @@ async def on_voice_state_update(member, before, after):
                 else:
                     text = member.name + 'さんが退室しました'
                     s_quote = urllib.parse.quote(text)
-                    mp3url = "http://translate.google.com/translate_tts?ie=UTF-8&q=" + s_quote + "&tl=" + lang + "&client=tw-ob"
+                    mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
                     member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
@@ -114,7 +114,7 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_command_error(ctx, error):
-    orig_error = getattr(error, "original", error)
+    orig_error = getattr(error, 'original', error)
     error_msg = ''.join(traceback.TracebackException.from_exception(orig_error).format())
     await ctx.send(error_msg)
 
