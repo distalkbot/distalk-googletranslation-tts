@@ -17,7 +17,7 @@ async def on_ready():
 
 @client.command()
 async def 接続(ctx):
-    if ctx.author.guild:
+    if ctx.message.guild:
         if ctx.author.voice is None:
             await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
         else:
@@ -33,7 +33,7 @@ async def 接続(ctx):
 
 @client.command()
 async def 切断(ctx):
-    if ctx.author.guild:
+    if ctx.message.guild:
         if ctx.voice_client is None:
             await ctx.send('ボイスチャンネルに接続していません。')
         else:
