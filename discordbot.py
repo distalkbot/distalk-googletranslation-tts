@@ -17,25 +17,27 @@ async def on_ready():
 
 @client.command()
 async def 接続(ctx):
-    if ctx.author.voice is None:
-        await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
-    else:
-        if ctx.guild.voice_client:
-            if ctx.author.voice.channel == ctx.guild.voice_client.channel:
-                await ctx.send('接続済みです。')
-            else:
-                await ctx.voice_client.disconnect()
-                await asyncio.sleep(0.5)
-                await ctx.author.voice.channel.connect()
+    if ctx.author.guild:
+        if ctx.author.voice is None:
+            await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
         else:
-            await ctx.author.voice.channel.connect()
+            if ctx.guild.voice_client:
+                if ctx.author.voice.channel == ctx.guild.voice_client.channel:
+                    await ctx.send('接続済みです。')
+                else:
+                    await ctx.voice_client.disconnect()
+                    await asyncio.sleep(0.5)
+                    await ctx.author.voice.channel.connect()
+            else:
+                await ctx.author.voice.channel.connect()
 
 @client.command()
 async def 切断(ctx):
-    if ctx.voice_client is None:
-        await ctx.send('ボイスチャンネルに接続していません。')
-    else:
-        await ctx.voice_client.disconnect()
+    if ctx.author.guild:
+        if ctx.voice_client is None:
+            await ctx.send('ボイスチャンネルに接続していません。')
+        else:
+            await ctx.voice_client.disconnect()
 
 @client.event
 async def on_message(message):
