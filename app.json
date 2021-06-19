@@ -1,7 +1,7 @@
 {
   "name": "distalk",
-  "description": "Discord TTS on heroku",
-  "repository": "https://github.com/distalkbot/distalk",
+  "description": "Discord TTS on heroku, Powered by Google Translation Text-to-Speech API.",
+  "repository": "https://github.com/distalkbot/distalk-googletranslation-tts",
   "keywords": ["python", "discord", "bot"],
   "buildpacks": [
     {
@@ -19,7 +19,7 @@
             "description": "ボットのトークンを入力します。"
     },
     "DISCORD_BOT_PREFIX": {
-            "description": "ボットのプレフィックスを入力します。",
+            "description": "ボットのプレフィックスを入力します。空欄にすると「🦑」に設定されます。",
             "required": false
     }
   }
