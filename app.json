@@ -1,7 +1,7 @@
 {
   "name": "distalk",
   "description": "Discord TTS on heroku",
-  "repository": "https://github.com/coolwind0202/distalk",
+  "repository": "https://github.com/distalkbot/distalk",
   "keywords": ["python", "discord", "bot"],
   "buildpacks": [
     {
