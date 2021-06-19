@@ -20,7 +20,7 @@
     },
     "DISCORD_BOT_PREFIX": {
             "description": "ボットのプレフィックスを入力します。",
-            "value": "🦑"
+            "required": "false"
     }
   }
 }
