@@ -46,7 +46,7 @@ async def on_message(message):
     else:
         if message.guild.voice_client:
             text = message.content
-            text = text.replace('\n','、')
+            text = text.replace('\n',　'、')
             pattern = r'^<@\d*>'
             if re.match(pattern, text):
                 match = re.search(r'^<@(\d*)>', text)
