@@ -16,7 +16,7 @@
   ],
   "env": {
     "DISCORD_BOT_TOKEN": {
-            "description": "ボットのトークンを入力します。,
+            "description": "ボットのトークンを入力します。",
     },
     "DISCORD_BOT_PREFIX": {
             "description": "ボットのプレフィックスを入力します。",
