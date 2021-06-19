@@ -1,7 +1,7 @@
 {
   "name": "distalk",
   "description": "Discord TTS on heroku",
-  "repository": "https://github.com/distalkbot/distalk",
+  "repository": "https://github.com/coolwind0202/distalk",
   "keywords": ["python", "discord", "bot"],
   "buildpacks": [
     {
@@ -13,5 +13,14 @@
     {
       "url": "https://github.com/Crazycatz00/heroku-buildpack-libopus.git"
     }
-  ]
+  ],
+  "env": {
+    "DISCORD_BOT_TOKEN": {
+            "description": "ボットのトークンを入力します。,
+    },
+    "DISCORD_BOT_PREFIX": {
+            "description": "ボットのプレフィックスを入力します。",
+            "value": "🦑"
+    }
+  }
 }
