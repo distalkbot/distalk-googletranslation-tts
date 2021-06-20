@@ -54,7 +54,7 @@ async def on_message(message):
                 user = await client.fetch_user(uid)
                 username = user.name + '、'
                 text = re.sub(pattern, username, text)
-            pattern = 'https?://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
+            pattern = r'https?://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
             text = re.sub(pattern, '画像', text)
             pattern = r'.*(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
             text = re.sub(pattern, '画像', text)
