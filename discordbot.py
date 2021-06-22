@@ -86,7 +86,7 @@ async def on_voice_state_update(member, before, after):
             await client.change_presence(activity=discord.Game(name=f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'))
         else:
             if member.guild.voice_client is None:
-#                 await asyncio.sleep(0.5)
+                await asyncio.sleep(0.5)
 #                 await after.channel.connect()
             else:
                 if member.guild.voice_client.channel is after.channel:
