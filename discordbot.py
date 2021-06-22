@@ -16,7 +16,7 @@ async def on_ready():
     await client.change_presence(activity=discord.Game(name=f'{prefix}ヘルプ | 0/{len(client.guilds)}サーバー'))
 
 @client.command()
-async def 接続(ctx):
+async def connect(ctx):
     if ctx.message.guild:
         if ctx.author.voice is None:
             await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
@@ -32,7 +32,7 @@ async def 接続(ctx):
                 await ctx.author.voice.channel.connect()
 
 @client.command()
-async def 切断(ctx):
+async def disconnect(ctx):
     if ctx.message.guild:
         if ctx.voice_client is None:
             await ctx.send('ボイスチャンネルに接続していません。')
@@ -86,8 +86,8 @@ async def on_voice_state_update(member, before, after):
             await client.change_presence(activity=discord.Game(name=f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'))
         else:
             if member.guild.voice_client is None:
-                await asyncio.sleep(0.5)
-                await after.channel.connect()
+#                 await asyncio.sleep(0.5)
+#                 await after.channel.connect()
             else:
                 if member.guild.voice_client.channel is after.channel:
                     text = member.name + 'さんが入室しました'
@@ -129,8 +129,8 @@ async def on_command_error(ctx, error):
 async def ヘルプ(ctx):
     message = f'''◆◇◆{client.user.name}の使い方◆◇◆
 {prefix}＋コマンドで命令できます。
-{prefix}接続：ボイスチャンネルに接続します。
-{prefix}切断：ボイスチャンネルから切断します。'''
+{prefix}connect：ボイスチャンネルに接続します。
+{prefix}disconnect：ボイスチャンネルから切断します。'''
     await ctx.send(message)
 
 client.run(token)
