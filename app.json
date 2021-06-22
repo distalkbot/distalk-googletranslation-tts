@@ -1,7 +1,7 @@
 {
   "name": "distalk",
   "description": "Discord TTS on heroku, Powered by Google Translation Text-to-Speech API.",
-  "repository": "https://github.com/distalkbot/distalk-googletranslation-tts",
+  "repository": "https://github.com/Nokking/distalk-googletranslation-tts",
   "keywords": ["python", "discord", "bot"],
   "buildpacks": [
     {
