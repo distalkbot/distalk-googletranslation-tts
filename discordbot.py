@@ -60,7 +60,9 @@ async def on_message(message):
             text = re.sub(pattern, '、画像', text)
             pattern = r'https://[\w/:%#\$&\?\(\)~\.=\+\-]+'
             text = re.sub(pattern, '、URL', text)
-            text = message.author.name + '、' + text
+            pattern = r'<:?(.+).*:\d+>'
+            text = re.sub(pattern, '、', text)
+#             text = message.author.name + '、' + text
             if text[-1:] == 'w' or text[-1:] == 'W' or text[-1:] == 'ｗ' or text[-1:] == 'W':
                 while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
                     text = text[:-1]
@@ -90,7 +92,7 @@ async def on_voice_state_update(member, before, after):
 #                 await after.channel.connect()
             else:
                 if member.guild.voice_client.channel is after.channel:
-                    text = member.name + 'さんが入室しました'
+                    text = member.name + 'さんが入室'
                     s_quote = urllib.parse.quote(text)
                     mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
                     while member.guild.voice_client.is_playing():
@@ -105,7 +107,7 @@ async def on_voice_state_update(member, before, after):
                     await asyncio.sleep(0.5)
                     await member.guild.voice_client.disconnect()
                 else:
-                    text = member.name + 'さんが退室しました'
+                    text = member.name + 'さんが退室'
                     s_quote = urllib.parse.quote(text)
                     mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
                     while member.guild.voice_client.is_playing():
