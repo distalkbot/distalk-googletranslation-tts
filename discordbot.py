@@ -129,8 +129,8 @@ async def on_command_error(ctx, error):
 async def ヘルプ(ctx):
     message = f'''◆◇◆{client.user.name}の使い方◆◇◆
 {prefix}＋コマンドで命令できます。
-{prefix}connect：ボイスチャンネルに接続します。
-{prefix}disconnect：ボイスチャンネルから切断します。'''
+{prefix}c：ボイスチャンネルに接続します。
+{prefix}d：ボイスチャンネルから切断します。'''
     await ctx.send(message)
 
 client.run(token)
