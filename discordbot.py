@@ -92,7 +92,7 @@ async def on_voice_state_update(member, before, after):
 #                 await after.channel.connect()
             else:
                 if member.guild.voice_client.channel is after.channel:
-                    text = member.name + 'さんが入室'
+                    text = member.name + 'が入室'
                     s_quote = urllib.parse.quote(text)
                     mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
                     while member.guild.voice_client.is_playing():
@@ -107,7 +107,7 @@ async def on_voice_state_update(member, before, after):
                     await asyncio.sleep(0.5)
                     await member.guild.voice_client.disconnect()
                 else:
-                    text = member.name + 'さんが退室'
+                    text = member.name + 'が退室'
                     s_quote = urllib.parse.quote(text)
                     mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
                     while member.guild.voice_client.is_playing():
