@@ -16,7 +16,7 @@ async def on_ready():
     await client.change_presence(activity=discord.Game(name=f'{prefix}ヘルプ | 0/{len(client.guilds)}サーバー'))
 
 @client.command()
-async def connect(ctx):
+async def c(ctx):
     if ctx.message.guild:
         if ctx.author.voice is None:
             await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
@@ -32,7 +32,7 @@ async def connect(ctx):
                 await ctx.author.voice.channel.connect()
 
 @client.command()
-async def disconnect(ctx):
+async def d(ctx):
     if ctx.message.guild:
         if ctx.voice_client is None:
             await ctx.send('ボイスチャンネルに接続していません。')
