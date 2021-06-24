@@ -69,14 +69,14 @@ async def on_message(message):
                 text = text[:-1] + '、ワラ'
             if message.attachments:
                 text += '、添付ファイル'
-            if len(text) < 100:
+            if len(text) < 40:
                 s_quote = urllib.parse.quote(text)
                 mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
                 while message.guild.voice_client.is_playing():
                     await asyncio.sleep(0.5)
                 message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
             else:
-                await message.channel.send('100文字以上は読み上げできません。')
+                await message.channel.send('40文字以上は読み上げできません。')
         else:
             pass
     await client.process_commands(message)
