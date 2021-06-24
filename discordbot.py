@@ -74,7 +74,7 @@ async def on_message(message):
                 mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
                 while message.guild.voice_client.is_playing():
                     await asyncio.sleep(0.5)
-                message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url),volume=0.8)
             else:
                 await message.channel.send('40文字以上は読み上げできません。')
         else:
