@@ -56,9 +56,9 @@ async def on_message(message):
                 text = re.sub(pattern, username, text)
             pattern = r'https?://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
             text = re.sub(pattern, '画像', text)
-            pattern = r'https://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
+            pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
             text = re.sub(pattern, '、画像', text)
-            pattern = r'https://[\w/:%#\$&\?\(\)~\.=\+\-]+'
+            pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+'
             text = re.sub(pattern, '、URL', text)
             pattern = r'<:?(.+).*:\d+>'
             text = re.sub(pattern, '、', text)
@@ -117,9 +117,9 @@ async def on_voice_state_update(member, before, after):
         if member.guild.voice_client.channel is before.channel:
             if len(member.guild.voice_client.channel.members) == 1 or member.voice.self_mute:
                 await asyncio.sleep(0.5)
-                await member.guild.voice_client.disconnect()
-                await asyncio.sleep(0.5)
-                await after.channel.connect()
+#                 await member.guild.voice_client.disconnect()
+#                 await asyncio.sleep(0.5)
+#                 await after.channel.connect()
 
 @client.event
 async def on_command_error(ctx, error):
