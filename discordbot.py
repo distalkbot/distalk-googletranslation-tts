@@ -74,7 +74,7 @@ async def on_message(message):
                 mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
                 while message.guild.voice_client.is_playing():
                     await asyncio.sleep(0.5)
-                message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url),volume=0.8)
+                message.guild.voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(mp3url), volume=0.8))
             else:
                 await message.channel.send('40文字以上は読み上げできません。')
         else:
@@ -97,7 +97,7 @@ async def on_voice_state_update(member, before, after):
                     mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
-                    member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                    member.guild.voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(mp3url), volume=0.8))
     elif after.channel is None:
         if member.bot:
             await client.change_presence(activity=discord.Game(name=f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'))
@@ -112,7 +112,7 @@ async def on_voice_state_update(member, before, after):
                     mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
-                    member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                    member.guild.voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(mp3url), volume=0.8))
     elif before.channel != after.channel:
         if member.guild.voice_client.channel is before.channel:
             if len(member.guild.voice_client.channel.members) == 1 or member.voice.self_mute:
