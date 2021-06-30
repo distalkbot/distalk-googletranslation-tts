@@ -13,7 +13,18 @@ client = commands.Bot(command_prefix=prefix)
 
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Game(name=f'{prefix}ヘルプ | 0/{len(client.guilds)}サーバー'))
+    presence = f'{prefix}ヘルプ | 0/{len(client.guilds)}サーバー'
+    await client.change_presence(activity=discord.Game(name=presence))
+
+@client.event
+async def on_guild_join(guild):
+    presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
+    await client.change_presence(activity=discord.Game(name=presence))
+
+@client.event
+async def on_guild_remove(guild):
+    presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
+    await client.change_presence(activity=discord.Game(name=presence))
 
 @client.command()
 async def c(ctx):
@@ -54,7 +65,7 @@ async def on_message(message):
                 user = await client.fetch_user(uid)
                 username = user.name + '、'
                 text = re.sub(pattern, username, text)
-            pattern = r'https?://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
+            pattern = r'https://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
             text = re.sub(pattern, '画像', text)
             pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
             text = re.sub(pattern, '、画像', text)
@@ -71,7 +82,7 @@ async def on_message(message):
                 text += '、添付ファイル'
             if len(text) < 40:
                 s_quote = urllib.parse.quote(text)
-                mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
+                mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
                 while message.guild.voice_client.is_playing():
                     await asyncio.sleep(0.5)
                 message.guild.voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(mp3url), volume=0.8))
@@ -84,8 +95,9 @@ async def on_message(message):
 @client.event
 async def on_voice_state_update(member, before, after):
     if before.channel is None:
-        if member.bot:
-            await client.change_presence(activity=discord.Game(name=f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'))
+        if member.id == client.user.id:
+            presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
+            await client.change_presence(activity=discord.Game(name=presence))
         else:
             if member.guild.voice_client is None:
                 await asyncio.sleep(0.5)
@@ -94,13 +106,14 @@ async def on_voice_state_update(member, before, after):
                 if member.guild.voice_client.channel is after.channel:
                     text = member.name + 'が入室'
                     s_quote = urllib.parse.quote(text)
-                    mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
+                    mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
                     member.guild.voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(mp3url), volume=0.8))
     elif after.channel is None:
-        if member.bot:
-            await client.change_presence(activity=discord.Game(name=f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'))
+        if member.id == client.user.id:
+            presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
+            await client.change_presence(activity=discord.Game(name=presence))
         else:
             if member.guild.voice_client.channel is before.channel:
                 if len(member.guild.voice_client.channel.members) == 1:
@@ -109,7 +122,7 @@ async def on_voice_state_update(member, before, after):
                 else:
                     text = member.name + 'が退室'
                     s_quote = urllib.parse.quote(text)
-                    mp3url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=' + s_quote + '&tl=' + lang + '&client=tw-ob'
+                    mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
                     member.guild.voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(mp3url), volume=0.8))
