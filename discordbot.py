@@ -79,7 +79,8 @@ async def on_message(message):
     # カスタムスタンプ
     text = re.sub(r'<a?\:([^\:]+)\:\d+>', '\\1、', text)
     # コードブロック
-    text = re.sub(r'```(?:`(?!```)|[^`])*```|`[^`]*`', '、', text)
+    text = re.sub(r'```(?:`(?!```)|[^`])*```', '、', text)
+    text = re.sub(r'`[^`]*`', '、', text)
     # www
     while True:
         m = re.search(r'([wW])+(?=\s|$)|([wW]){3,}', text)
