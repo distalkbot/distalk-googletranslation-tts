@@ -59,18 +59,23 @@ async def d(ctx):
 @client.listen()
 async def on_message(message):
     voice_client = message.guild.voice_client
-    if voice_client is None: return
-    if message.content.startswith(prefix): return
-    if message.author.voice is None or message.author.voice.channel != voice_client.channel: return
-    if message.author.bot: return
-    
+    if voice_client is None:
+        return
+    if message.content.startswith(prefix):
+        return
+    if message.author.voice is None or message.author.voice.channel != voice_client.channel:
+        return
+    if message.author.bot:
+        return
+
     text = message.content
     text = text.replace('\n', '、')
 
     # メンションユーザー名
     while True:
         m = re.search(r'\s*<@!(\d*)>(?:\s+<@!(\d*)>)*\s*', text)
-        if m is None: break
+        if m is None:
+            break
         member = await voice_client.guild.fetch_member(m.group(1))
         replacement = (member.nick or member.name)[:12] if member else ''
         text = replace_text_by_match(text, m, replacement)
@@ -84,11 +89,13 @@ async def on_message(message):
     # www
     while True:
         m = re.search(r'([wW])+(?=\s|$)|([wW]){3,}', text)
-        if m is None: break
+        if m is None:
+            break
         text = replace_text_by_match(text, m, "ワラ" * min(len(m.groups()), 1), last_sep="。")
 
     text = re.sub(r'[、。]{2,}', '、', text)
-    if text == '、': text = ''
+    if text == '、':
+        text = ''
 
     if len(text) <= 0:
         print('Nothing to read')
@@ -106,8 +113,9 @@ async def on_voice_state_update(member, before, after):
         return
 
     voice_client = member.guild.voice_client
-    if voice_client is None: return
-    
+    if voice_client is None:
+        return
+
     if after.channel is voice_client.channel:
         await speak(voice_client, member.name + 'が入室')
     elif before.channel is voice_client.channel:
