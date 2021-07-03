@@ -9,6 +9,7 @@ import re
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 lang = os.getenv('DISCORD_BOT_LANG', default='ja')
 token = os.environ['DISCORD_BOT_TOKEN']
+max_len_text = int(os.getenv('DISCORD_BOT_TEXT_LEN', default=40))
 
 intents = discord.Intents.default()
 intents.members = True
@@ -94,17 +95,18 @@ async def on_message(message):
         text = replace_text_by_match(text, m, "ワラ" * min(len(m.groups()), 1), last_sep="。")
 
     text = re.sub(r'[、。]{2,}', '、', text)
+    text = re.sub(r'\s+', ' ', text)
     if text == '、':
         text = ''
 
     if len(text) <= 0:
         print('Nothing to read')
-    elif len(text) < 40:
-        print(text)
+    elif len(text) < max_len_text:
+        print(f'{text}({len(text)})')
         await speak(voice_client, text)
     else:
-        print('Cannot read:' + text)
-        await message.channel.send('40文字以上は読み上げできません。')
+        print(f'Cannot read: {text[:max_len_text]}...({len(text)})')
+        await message.channel.send(f'{max_len_text}文字以上は読み上げできません。')
 
 @client.event
 async def on_voice_state_update(member, before, after):
@@ -118,9 +120,10 @@ async def on_voice_state_update(member, before, after):
     if voice_client is None:
         return
 
-    if after.channel is voice_client.channel:
+    b_channel, vc_channel, a_channel = before.channel, voice_client.channel, after.channel
+    if b_channel != vc_channel and a_channel == vc_channel:
         await speak(voice_client, member.name + 'が入室')
-    elif before.channel is voice_client.channel:
+    elif b_channel == vc_channel and a_channel != vc_channel:
         if len(voice_client.channel.members) > 1:
             await speak(voice_client, member.name + 'が退室')
         else:
