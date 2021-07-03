@@ -28,7 +28,7 @@ async def on_guild_remove(guild):
 
 @client.command()
 async def c(ctx):
-    await ctx.message.delete()
+    await delete_command_safety(ctx.message)
     if ctx.author.voice is None:
         await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
         return
@@ -50,7 +50,7 @@ async def c(ctx):
 
 @client.command()
 async def d(ctx):
-    await ctx.message.delete()
+    await delete_command_safety(ctx.message)
     if ctx.voice_client is None:
         await ctx.send('ボイスチャンネルに接続していません。')
     else:
@@ -61,11 +61,11 @@ async def on_message(message):
     voice_client = message.guild.voice_client
     if voice_client is None:
         return
-    if message.content.startswith(prefix):
-        return
     if message.author.voice is None or message.author.voice.channel != voice_client.channel:
         return
     if message.author.bot:
+        return
+    if message.content.startswith(prefix):
         return
 
     text = message.content
@@ -111,6 +111,8 @@ async def on_voice_state_update(member, before, after):
     if member.id == client.user.id:
         await change_presence()
         return
+    if member.bot:
+        return
 
     voice_client = member.guild.voice_client
     if voice_client is None:
@@ -133,8 +135,7 @@ async def on_command_error(ctx, error):
 
 @client.command()
 async def h(ctx):
-    await ctx.message.delete()
-
+    await delete_command_safety(ctx.message)
     message = f'''
 ```
 {client.user.name}の使い方
@@ -145,6 +146,11 @@ async def h(ctx):
 '''
     await ctx.send(message)
 
+async def delete_command_safety(message):
+    try:
+        await message.delete()
+    except discord.errors.DiscordException as e:
+        print(''.join(traceback.TracebackException.from_exception(e).format()))
 
 async def change_presence():
     presence = f'{prefix}h | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
