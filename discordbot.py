@@ -67,9 +67,9 @@ async def on_message(message):
                 text = re.sub(pattern, username, text)
             pattern = r'https://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
             text = re.sub(pattern, '画像', text)
-            pattern = r'https://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
+            pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
             text = re.sub(pattern, '、画像', text)
-            pattern = r'https://[\w/:%#\$&\?\(\)~\.=\+\-]+'
+            pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+'
             text = re.sub(pattern, '、URL', text)
             text = message.author.name + '、' + text
             if text[-1:] == 'w' or text[-1:] == 'W' or text[-1:] == 'ｗ' or text[-1:] == 'W':
