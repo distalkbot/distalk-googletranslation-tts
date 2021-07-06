@@ -64,6 +64,10 @@ async def on_message(message):
                 user = await client.fetch_user(user_id)
                 username = f'、{user.name}へのメンション、'
                 text = re.sub(f' ?<@{user_id}> ', username, text)
+            pattern = r'<:([a-zA-Z0-9_]+):\d+>'
+            match = re.findall(pattern, text)
+            for emoji_name in match:
+                text = re.sub(f'<:{emoji_name}:\d*>', f'、{emoji_name}、', text)
             pattern = r'https://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
             text = re.sub(pattern, '画像', text)
             pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
