@@ -58,13 +58,12 @@ async def on_message(message):
         if message.guild.voice_client:
             text = message.content
             text = text.replace('\n', '、')
-            pattern = r'^<@\d*>'
-            if re.match(pattern, text):
-                match = re.search(r'^<@(\d*)>', text)
-                uid = match.group(1)
-                user = await client.fetch_user(uid)
-                username = user.name + '、'
-                text = re.sub(pattern, username, text)
+            pattern = r' ?<@(\d+)> '
+            match = re.findall(pattern, text)
+            for user_id in match:
+                user = await client.fetch_user(user_id)
+                username = f'、{user.name}へのメンション、'
+                text = re.sub(f' ?<@{user_id}> ', username, text)
             pattern = r'https://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
             text = re.sub(pattern, '画像', text)
             pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
