@@ -13,7 +13,7 @@ client = commands.Bot(command_prefix=prefix)
 
 @client.event
 async def on_ready():
-    presence = f'{prefix}ヘルプ | 0/{len(client.guilds)}サーバー'
+    presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
     await client.change_presence(activity=discord.Game(name=presence))
 
 @client.event
@@ -41,6 +41,8 @@ async def 接続(ctx):
                     await ctx.author.voice.channel.connect()
             else:
                 await ctx.author.voice.channel.connect()
+                presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
+                await client.change_presence(activity=discord.Game(name=presence))
 
 @client.command()
 async def 切断(ctx):
@@ -49,6 +51,8 @@ async def 切断(ctx):
             await ctx.send('ボイスチャンネルに接続していません。')
         else:
             await ctx.voice_client.disconnect()
+            presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
+            await client.change_presence(activity=discord.Game(name=presence))
 
 @client.event
 async def on_message(message):
