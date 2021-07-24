@@ -127,17 +127,18 @@ async def on_voice_state_update(member, before, after):
             presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
             await client.change_presence(activity=discord.Game(name=presence))
         else:
-            if member.guild.voice_client.channel is before.channel:
-                if len(member.guild.voice_client.channel.members) == 1:
-                    await asyncio.sleep(0.5)
-                    await member.guild.voice_client.disconnect()
-                else:
-                    text = member.name + 'さんが退室しました'
-                    s_quote = urllib.parse.quote(text)
-                    mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
-                    while member.guild.voice_client.is_playing():
+            if member.guild.voice_client:
+                if member.guild.voice_client.channel is before.channel:
+                    if len(member.guild.voice_client.channel.members) == 1:
                         await asyncio.sleep(0.5)
-                    member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                        await member.guild.voice_client.disconnect()
+                    else:
+                        text = member.name + 'さんが退室しました'
+                        s_quote = urllib.parse.quote(text)
+                        mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
+                        while member.guild.voice_client.is_playing():
+                            await asyncio.sleep(0.5)
+                        member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
     elif before.channel != after.channel:
         if member.guild.voice_client:
             if member.guild.voice_client.channel is before.channel:
