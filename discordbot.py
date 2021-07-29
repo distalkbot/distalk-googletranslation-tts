@@ -5,7 +5,8 @@ import os
 import traceback
 import re
 from gtts import gTTS
-
+from pydub import AudioSegment
+from pydub import effects
 
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 lang = os.getenv('DISCORD_BOT_LANG', default='ja')
@@ -93,7 +94,7 @@ async def on_message(message):
                 tts(text)
                 while message.guild.voice_client.is_playing():
                     await asyncio.sleep(0.5)
-                message.guild.voice_client.play(discord.FFmpegPCMAudio('/tmp/text.mp3'))
+                message.guild.voice_client.play(discord.FFmpegPCMAudio('/tmp/text_speed_changed.mp3'))
             else:
                 await message.channel.send('100文字以上は読み上げできません。')
         else:
@@ -116,7 +117,7 @@ async def on_voice_state_update(member, before, after):
                     tts(text)
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
-                    member.guild.voice_client.play(discord.FFmpegPCMAudio('/tmp/text.mp3'))
+                    member.guild.voice_client.play(discord.FFmpegPCMAudio('/tmp/text_speed_changed.mp3'))
     elif after.channel is None:
         if member.id == client.user.id:
             presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
@@ -132,7 +133,7 @@ async def on_voice_state_update(member, before, after):
                         tts(text)
                         while member.guild.voice_client.is_playing():
                             await asyncio.sleep(0.5)
-                        member.guild.voice_client.play(discord.FFmpegPCMAudio('/tmp/text.mp3'))
+                        member.guild.voice_client.play(discord.FFmpegPCMAudio('/tmp/text_speed_changed.mp3'))
     elif before.channel != after.channel:
         if member.guild.voice_client:
             if member.guild.voice_client.channel is before.channel:
@@ -159,6 +160,9 @@ async def ヘルプ(ctx):
 def tts(text):
     tts = gTTS(text=text, lang=lang)
     tts.save('/tmp/text.mp3')
+    af1 = AudioSegment.from_mp3('/tmp/text.mp3')
+    af2 = af1.speedup(playback_speed=1.3)
+    af2.export('/tmp/text_speed_changed.mp3', format='mp3')
 
 
 client.run(token)
