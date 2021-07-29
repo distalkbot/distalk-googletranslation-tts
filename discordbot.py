@@ -6,7 +6,6 @@ import traceback
 import re
 from gtts import gTTS
 from pydub import AudioSegment
-from pydub import effects
 
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 lang = os.getenv('DISCORD_BOT_LANG', default='ja')
