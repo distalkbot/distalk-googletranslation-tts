@@ -3,8 +3,9 @@ import discord
 from discord.ext import commands
 import os
 import traceback
-import urllib.parse
 import re
+from gtts import gTTS
+
 
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 lang = os.getenv('DISCORD_BOT_LANG', default='ja')
@@ -89,11 +90,10 @@ async def on_message(message):
             if message.attachments:
                 text += '、添付ファイル'
             if len(text) < 100:
-                s_quote = urllib.parse.quote(text)
-                mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
+                tts(text)
                 while message.guild.voice_client.is_playing():
                     await asyncio.sleep(0.5)
-                message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                message.guild.voice_client.play(discord.FFmpegPCMAudio('/tmp/message.mp3'))
             else:
                 await message.channel.send('100文字以上は読み上げできません。')
         else:
@@ -113,11 +113,10 @@ async def on_voice_state_update(member, before, after):
             else:
                 if member.guild.voice_client.channel is after.channel:
                     text = member.name + 'さんが入室しました'
-                    s_quote = urllib.parse.quote(text)
-                    mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
+                    tts(text)
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
-                    member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                    member.guild.voice_client.play(discord.FFmpegPCMAudio('/tmp/message.mp3'))
     elif after.channel is None:
         if member.id == client.user.id:
             presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
@@ -130,11 +129,10 @@ async def on_voice_state_update(member, before, after):
                         await member.guild.voice_client.disconnect()
                     else:
                         text = member.name + 'さんが退室しました'
-                        s_quote = urllib.parse.quote(text)
-                        mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
+                        tts(text)
                         while member.guild.voice_client.is_playing():
                             await asyncio.sleep(0.5)
-                        member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                        member.guild.voice_client.play(discord.FFmpegPCMAudio('/tmp/message.mp3'))
     elif before.channel != after.channel:
         if member.guild.voice_client:
             if member.guild.voice_client.channel is before.channel:
@@ -157,5 +155,10 @@ async def ヘルプ(ctx):
 {prefix}接続：ボイスチャンネルに接続します。
 {prefix}切断：ボイスチャンネルから切断します。'''
     await ctx.send(message)
+
+def tts(text):
+    tts = gTTS(text=text, lang=lang)
+    tts.save('/tmp/text.mp3')
+
 
 client.run(token)
