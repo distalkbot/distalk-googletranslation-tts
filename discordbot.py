@@ -86,8 +86,11 @@ async def on_message(message):
                 while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
                     text = text[:-1]
                 text = text[:-1] + '、ワラ'
-            if message.attachments:
-                text += '、添付ファイル'
+            for attachment in message.attachments:
+                if attachment.filename.endswith((".jpg", ".jpeg", ".gif", ".png", ".bmp")):
+                    text += '、画像'
+                else:
+                    text += '、添付ファイル'
             if len(text) < 100:
                 s_quote = urllib.parse.quote(text)
                 mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
