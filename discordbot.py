@@ -5,6 +5,8 @@ import os
 import traceback
 import urllib.parse
 import re
+import emoji
+import json
 
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 lang = os.getenv('DISCORD_BOT_LANG', default='ja')
@@ -58,6 +60,13 @@ async def on_message(message):
         if message.guild.voice_client:
             text = message.content
             text = text.replace('\n', '、')
+            text = re.sub(r'[\U0000FE00-\U0000FE0F]', '', text)
+            text = re.sub(r'[\U0001F3FB-\U0001F3FF]', '', text)
+            with open('emoji_ja.json', encoding='utf-8') as file:
+                emoji_dataset = json.load(file)
+            for char in text:
+                if char in emoji.UNICODE_EMOJI['en'] and char in emoji_dataset and char in emoji_dataset.keys():
+                    text = text.replace(char, emoji_dataset[char]['short_name'])
             pattern = r'<@(\d+)>'
             match = re.findall(pattern, text)
             for user_id in match:
