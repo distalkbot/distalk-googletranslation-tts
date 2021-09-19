@@ -65,7 +65,7 @@ async def on_message(message):
             with open('emoji_ja.json', encoding='utf-8') as file:
                 emoji_dataset = json.load(file)
             for char in text:
-                if char in emoji.UNICODE_EMOJI['en'] and char in emoji_dataset and char in emoji_dataset.keys():
+                if char in emoji.UNICODE_EMOJI['en'] and char in emoji_dataset:
                     text = text.replace(char, emoji_dataset[char]['short_name'])
             pattern = r'<@(\d+)>'
             match = re.findall(pattern, text)
