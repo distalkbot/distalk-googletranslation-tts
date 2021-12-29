@@ -183,8 +183,7 @@ async def on_command_error(ctx, error):
 
 @client.command()
 async def ヘルプ(ctx):
-    message = \
-f'''◆◇◆{client.user.name}の使い方◆◇◆
+    message = f'''◆◇◆{client.user.name}の使い方◆◇◆
 {prefix}＋コマンドで命令できます。
 {prefix}接続：ボイスチャンネルに接続します。
 {prefix}切断：ボイスチャンネルから切断します。'''
