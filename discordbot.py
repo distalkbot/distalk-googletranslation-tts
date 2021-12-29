@@ -56,79 +56,76 @@ async def 切断(ctx):
 
 @client.event
 async def on_message(message):
-    if message.content.startswith(prefix):
-        pass
-    else:
-        if message.guild.voice_client:
-            text = message.content
+    if message.guild.voice_client:
+        if not message.content.startswith(prefix):
+            if not message.author.bot:
+                text = message.content
 
-            # Add author's name
-            text = message.author.name + '、' + text
+                # Add author's name
+                text = message.author.name + '、' + text
 
-            # Replace new line
-            text = text.replace('\n', '、')
+                # Replace new line
+                text = text.replace('\n', '、')
 
-            # Replace mention to user
-            pattern = r'<@!?(\d+)>'
-            match = re.findall(pattern, text)
-            for user_id in match:
-                user = await client.fetch_user(user_id)
-                user_name = f'、{user.name}へのメンション、'
-                text = re.sub(rf'<@!?{user_id}>', user_name, text)
+                # Replace mention to user
+                pattern = r'<@!?(\d+)>'
+                match = re.findall(pattern, text)
+                for user_id in match:
+                    user = await client.fetch_user(user_id)
+                    user_name = f'、{user.name}へのメンション、'
+                    text = re.sub(rf'<@!?{user_id}>', user_name, text)
 
-            # Replace mention to role
-            pattern = r'<@&(\d+)>'
-            match = re.findall(pattern, text)
-            for role_id in match:
-                role = message.guild.get_role(int(role_id))
-                role_name = f'、{role.name}へのメンション、'
-                text = re.sub(f'<@&{role_id}>', role_name, text)
+                # Replace mention to role
+                pattern = r'<@&(\d+)>'
+                match = re.findall(pattern, text)
+                for role_id in match:
+                    role = message.guild.get_role(int(role_id))
+                    role_name = f'、{role.name}へのメンション、'
+                    text = re.sub(f'<@&{role_id}>', role_name, text)
 
-            # Replace Unicode emoji
-            text = re.sub(r'[\U0000FE00-\U0000FE0F]', '', text)
-            text = re.sub(r'[\U0001F3FB-\U0001F3FF]', '', text)
-            for char in text:
-                if char in emoji.UNICODE_EMOJI['en'] and char in emoji_dataset:
-                    text = text.replace(char, emoji_dataset[char]['short_name'])
+                # Replace Unicode emoji
+                text = re.sub(r'[\U0000FE00-\U0000FE0F]', '', text)
+                text = re.sub(r'[\U0001F3FB-\U0001F3FF]', '', text)
+                for char in text:
+                    if char in emoji.UNICODE_EMOJI['en'] and char in emoji_dataset:
+                        text = text.replace(char, emoji_dataset[char]['short_name'])
 
-            # Replace Discord emoji
-            pattern = r'<:([a-zA-Z0-9_]+):\d+>'
-            match = re.findall(pattern, text)
-            for emoji_name in match:
-                emoji_read_name = emoji_name.replace('_', ' ')
-                text = re.sub(rf'<:{emoji_name}:\d+>', f'、{emoji_read_name}、', text)
+                # Replace Discord emoji
+                pattern = r'<:([a-zA-Z0-9_]+):\d+>'
+                match = re.findall(pattern, text)
+                for emoji_name in match:
+                    emoji_read_name = emoji_name.replace('_', ' ')
+                    text = re.sub(rf'<:{emoji_name}:\d+>', f'、{emoji_read_name}、', text)
 
-            # Replace URL
-            pattern = r'https://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
-            text = re.sub(pattern, '画像', text)
-            pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
-            text = re.sub(pattern, '、画像', text)
-            pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+'
-            text = re.sub(pattern, '、URL', text)
+                # Replace URL
+                pattern = r'https://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
+                text = re.sub(pattern, '画像', text)
+                pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
+                text = re.sub(pattern, '、画像', text)
+                pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+'
+                text = re.sub(pattern, '、URL', text)
 
-            # Replace laughing expression
-            if text[-1:] == 'w' or text[-1:] == 'W' or text[-1:] == 'ｗ' or text[-1:] == 'W':
-                while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
-                    text = text[:-1]
-                text = text[:-1] + '、ワラ'
+                # Replace laughing expression
+                if text[-1:] == 'w' or text[-1:] == 'W' or text[-1:] == 'ｗ' or text[-1:] == 'W':
+                    while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
+                        text = text[:-1]
+                    text = text[:-1] + '、ワラ'
 
-            # Add attachment presence
-            for attachment in message.attachments:
-                if attachment.filename.endswith((".jpg", ".jpeg", ".gif", ".png", ".bmp")):
-                    text += '、画像'
+                # Add attachment presence
+                for attachment in message.attachments:
+                    if attachment.filename.endswith((".jpg", ".jpeg", ".gif", ".png", ".bmp")):
+                        text += '、画像'
+                    else:
+                        text += '、添付ファイル'
+
+                if len(text) < 100:
+                    s_quote = urllib.parse.quote(text)
+                    mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
+                    while message.guild.voice_client.is_playing():
+                        await asyncio.sleep(0.5)
+                    message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
                 else:
-                    text += '、添付ファイル'
-
-            if len(text) < 100:
-                s_quote = urllib.parse.quote(text)
-                mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
-                while message.guild.voice_client.is_playing():
-                    await asyncio.sleep(0.5)
-                message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
-            else:
-                await message.channel.send('100文字以上は読み上げできません。')
-        else:
-            pass
+                    await message.channel.send('100文字以上は読み上げできません。')
     await client.process_commands(message)
 
 @client.event
