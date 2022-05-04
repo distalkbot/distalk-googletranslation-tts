@@ -127,7 +127,8 @@ async def on_message(message):
                     mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
                     while message.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
-                    message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                    source = await discord.FFmpegOpusAudio.from_probe(mp3url)
+                    message.guild.voice_client.play(source)
                 else:
                     await message.channel.send('100文字以上は読み上げできません。')
     await client.process_commands(message)
@@ -149,7 +150,8 @@ async def on_voice_state_update(member, before, after):
                     mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
-                    member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                    source = await discord.FFmpegOpusAudio.from_probe(mp3url)
+                    member.guild.voice_client.play(source)
     elif after.channel is None:
         if member.id == client.user.id:
             presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
@@ -166,7 +168,8 @@ async def on_voice_state_update(member, before, after):
                         mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
                         while member.guild.voice_client.is_playing():
                             await asyncio.sleep(0.5)
-                        member.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                    source = await discord.FFmpegOpusAudio.from_probe(mp3url)
+                    member.guild.voice_client.play(source)
     elif before.channel != after.channel:
         if member.guild.voice_client:
             if member.guild.voice_client.channel is before.channel:
