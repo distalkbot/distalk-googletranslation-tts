@@ -168,8 +168,8 @@ async def on_voice_state_update(member, before, after):
                         mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
                         while member.guild.voice_client.is_playing():
                             await asyncio.sleep(0.5)
-                    source = await discord.FFmpegOpusAudio.from_probe(mp3url)
-                    member.guild.voice_client.play(source)
+                        source = await discord.FFmpegOpusAudio.from_probe(mp3url)
+                        member.guild.voice_client.play(source)
     elif before.channel != after.channel:
         if member.guild.voice_client:
             if member.guild.voice_client.channel is before.channel:
