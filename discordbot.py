@@ -151,7 +151,7 @@ async def on_voice_state_update(member, before, after):
                     while member.guild.voice_client.is_playing():
                         await asyncio.sleep(0.5)
                     source = await discord.FFmpegOpusAudio.from_probe(mp3url)
-                    message.guild.voice_client.play(source)
+                    member.guild.voice_client.play(source)
     elif after.channel is None:
         if member.id == client.user.id:
             presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
@@ -169,7 +169,7 @@ async def on_voice_state_update(member, before, after):
                         while member.guild.voice_client.is_playing():
                             await asyncio.sleep(0.5)
                     source = await discord.FFmpegOpusAudio.from_probe(mp3url)
-                    message.guild.voice_client.play(source)
+                    member.guild.voice_client.play(source)
     elif before.channel != after.channel:
         if member.guild.voice_client:
             if member.guild.voice_client.channel is before.channel:
