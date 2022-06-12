@@ -14,6 +14,3 @@ with psycopg2.connect(database_url) as conn:
             )
             '''
         cur.execute(sql)
-
-conn.commit()
-conn.close()
