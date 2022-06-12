@@ -22,5 +22,13 @@
             "description": "ボットのプレフィックスを入力します。空欄にすると「🦑」に設定されます。",
             "required": false
     }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql"
+    }
+  ],
+  "scripts": {
+    "postdeploy": "python init_dict.py"
   }
 }
