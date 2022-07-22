@@ -55,7 +55,7 @@ async def d(ctx):
     if ctx.voice_client is None:
         await ctx.send('ボイスチャンネルに接続していません。')
     else:
-        await speak(ctx.guild.voice_client,"しゃべあざらを終了します")
+        await speak(ctx.guild.voice_client,"終了します")
         await asyncio.sleep(3.5)
         await ctx.voice_client.disconnect()
 
