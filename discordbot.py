@@ -55,6 +55,8 @@ async def d(ctx):
     if ctx.voice_client is None:
         await ctx.send('ボイスチャンネルに接続していません。')
     else:
+        await speak(ctx.guild.voice_client,"しゃべあざらを終了します")
+        await asyncio.sleep(3.5)
         await ctx.voice_client.disconnect()
 
 @client.listen()
@@ -74,14 +76,14 @@ async def on_message(message):
 
     # メンションユーザー名
     while True:
-        m = re.search(r'\s*<@!(\d*)>(?:\s+<@!(\d*)>)*\s*', text)
+        m = re.search(r'<@!?(\d+)>', text)
         if m is None:
             break
         member = await voice_client.guild.fetch_member(m.group(1))
         replacement = (member.nick or member.name)[:12] if member else ''
         text = replace_text_by_match(text, m, replacement)
     # URL
-    text = re.sub(r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+', '', text)
+    text = re.sub(r'https?://[\w/:%#,\$&\?\(\)~\.=\+\-]+', '', text)
     # カスタムスタンプ
     text = re.sub(r'<a?\:([^\:]+)\:\d+>', '\\1、', text)
     # コードブロック
@@ -156,7 +158,7 @@ async def delete_command_safety(message):
         print(''.join(traceback.TracebackException.from_exception(e).format()))
 
 async def change_presence():
-    presence = f'{prefix}h | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
+    presence = f'接続 {prefix}c 切断 {prefix}d | ヘルプ{prefix}h 稼働{len(client.voice_clients)}/{len(client.guilds)}サーバー'
     await client.change_presence(activity=discord.Game(name=presence))
 
 async def speak(voice_client, text, volume=0.8):
