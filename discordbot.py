@@ -8,6 +8,7 @@ import re
 
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 lang = os.getenv('DISCORD_BOT_LANG', default='ja')
+botname = os.getenv('DISCORD_BOT_NAME', default='Bot')
 token = os.environ['DISCORD_BOT_TOKEN']
 max_len_text = int(os.getenv('DISCORD_BOT_TEXT_LEN', default=40))
 
@@ -42,10 +43,14 @@ async def c(ctx):
 
     if ctx.guild.voice_client is None:
         await voice_connect(ctx)
+        await asyncio.sleep(1.0)
+        await speak(ctx.guild.voice_client, f'{botname}が入室しました。')
     elif ctx.author.voice.channel != ctx.guild.voice_client.channel:
         await ctx.voice_client.disconnect()
         await asyncio.sleep(0.5)
         await voice_connect(ctx)
+        await asyncio.sleep(1.0)
+        await speak(ctx.guild.voice_client, f'{botname}が入室しました。')
     else:
         await ctx.send('接続済みです。')
 
@@ -55,7 +60,7 @@ async def d(ctx):
     if ctx.voice_client is None:
         await ctx.send('ボイスチャンネルに接続していません。')
     else:
-        await speak(ctx.guild.voice_client,"しゃべあざらを終了します")
+        await speak(ctx.guild.voice_client, f'{botname}を終了します。')
         await asyncio.sleep(3.5)
         await ctx.voice_client.disconnect()
 
