@@ -1,6 +1,6 @@
 import asyncio
 import discord
-from discord.ext import commands
+from discord import app_commands
 import os
 import traceback
 import urllib.parse
@@ -15,7 +15,7 @@ token = os.environ['DISCORD_BOT_TOKEN']
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
-tree = discord.app_commands.CommandTree(client)
+tree = app_commands.CommandTree(client)
 with open('emoji_ja.json', encoding='utf-8') as file:
     emoji_dataset = json.load(file)
 database_url = os.environ.get('DATABASE_URL')
@@ -24,6 +24,7 @@ database_url = os.environ.get('DATABASE_URL')
 async def on_ready():
     presence = f'{prefix}ヘルプ | 0/{len(client.guilds)}サーバー'
     await client.change_presence(activity=discord.Game(name=presence))
+    await tree.sync()
 
 @client.event
 async def on_guild_join(guild):
@@ -35,10 +36,7 @@ async def on_guild_remove(guild):
     presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
     await client.change_presence(activity=discord.Game(name=presence))
 
-@tree.command(
-    name="接続",
-    description="Send Hello world."
-)
+@tree.command(description="読み上げbotをボイスチャンネルに接続します")
 async def 接続(ctx):
     if ctx.message.guild:
         if ctx.author.voice is None:
@@ -54,7 +52,7 @@ async def 接続(ctx):
             else:
                 await ctx.author.voice.channel.connect()
 
-@client.command()
+@tree.command()
 async def 切断(ctx):
     if ctx.message.guild:
         if ctx.voice_client is None:
@@ -62,7 +60,7 @@ async def 切断(ctx):
         else:
             await ctx.voice_client.disconnect()
 
-@client.command()
+@tree.command()
 async def 辞書登録(ctx, *args):
     if len(args) < 2:
         await ctx.send(f'「{prefix}辞書登録 単語 よみがな」で入力してください。')
@@ -77,7 +75,7 @@ async def 辞書登録(ctx, *args):
                 cur.execute(sql, value)
                 await ctx.send(f'辞書登録しました：{word}→{kana}\n')
 
-@client.command()
+@tree.command()
 async def 辞書削除(ctx, arg):
     with psycopg2.connect(database_url) as conn:
         with conn.cursor() as cur:
@@ -96,7 +94,7 @@ async def 辞書削除(ctx, arg):
                 cur.execute(sql, value)
                 await ctx.send(f'辞書削除しました：{word}')
 
-@client.command()
+@tree.command()
 async def 辞書確認(ctx):
     with psycopg2.connect(database_url) as conn:
         with conn.cursor() as cur:
@@ -255,7 +253,7 @@ async def on_command_error(ctx, error):
     error_msg = ''.join(traceback.TracebackException.from_exception(orig_error).format())
     await ctx.send(error_msg)
 
-@client.command()
+@tree.command()
 async def ヘルプ(ctx):
     message = f'''◆◇◆{client.user.name}の使い方◆◇◆
 {prefix}接続：ボイスチャンネルに接続します。
