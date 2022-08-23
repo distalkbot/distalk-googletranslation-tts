@@ -39,7 +39,7 @@ async def on_guild_remove(guild):
     name="接続",
     description="Send Hello world."
 )
-async def connect(ctx:SlashContext):
+async def 接続():
     if ctx.message.guild:
         if ctx.author.voice is None:
             await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
