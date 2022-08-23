@@ -12,7 +12,9 @@ import psycopg2
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 lang = os.getenv('DISCORD_BOT_LANG', default='ja')
 token = os.environ['DISCORD_BOT_TOKEN']
-client = commands.Bot(command_prefix=prefix)
+intents = discord.Intents.default()
+intents.message_content = True
+client = commands.Bot(command_prefix=prefix, intents=intents)
 with open('emoji_ja.json', encoding='utf-8') as file:
     emoji_dataset = json.load(file)
 database_url = os.environ.get('DATABASE_URL')
