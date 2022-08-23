@@ -37,7 +37,7 @@ async def on_guild_remove(guild):
     await client.change_presence(activity=discord.Game(name=presence))
 
 @tree.command(description="読み上げbotをボイスチャンネルに接続します")
-async def 接続(ctx):
+async def 接続(self, ctx: commands.Context):
     if ctx.message.guild:
         if ctx.author.voice is None:
             await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
@@ -53,27 +53,12 @@ async def 接続(ctx):
                 await ctx.author.voice.channel.connect()
 
 @tree.command()
-async def 切断(ctx):
+async def 切断(self, ctx: commands.Context):
     if ctx.message.guild:
         if ctx.voice_client is None:
             await ctx.send('ボイスチャンネルに接続していません。')
         else:
             await ctx.voice_client.disconnect()
-
-@tree.command()
-async def 辞書登録(ctx, *args):
-    if len(args) < 2:
-        await ctx.send(f'「{prefix}辞書登録 単語 よみがな」で入力してください。')
-    else:
-        with psycopg2.connect(database_url) as conn:
-            with conn.cursor() as cur:
-                guild_id = ctx.guild.id
-                word = args[0]
-                kana = args[1]
-                sql = 'INSERT INTO dictionary (guildId, word, kana) VALUES (%s,%s,%s) ON CONFLICT (guildId, word) DO UPDATE SET kana = EXCLUDED.kana'
-                value = (guild_id, word, kana)
-                cur.execute(sql, value)
-                await ctx.send(f'辞書登録しました：{word}→{kana}\n')
 
 @tree.command()
 async def 辞書削除(ctx, arg):
@@ -95,7 +80,7 @@ async def 辞書削除(ctx, arg):
                 await ctx.send(f'辞書削除しました：{word}')
 
 @tree.command()
-async def 辞書確認(ctx):
+async def 辞書確認(self, ctx: commands.Context):
     with psycopg2.connect(database_url) as conn:
         with conn.cursor() as cur:
             sql = 'SELECT * FROM dictionary WHERE guildId = %s'
@@ -254,7 +239,7 @@ async def on_command_error(ctx, error):
     await ctx.send(error_msg)
 
 @tree.command()
-async def ヘルプ(ctx):
+async def ヘルプ(self, ctx: commands.Context):
     message = f'''◆◇◆{client.user.name}の使い方◆◇◆
 {prefix}接続：ボイスチャンネルに接続します。
 {prefix}切断：ボイスチャンネルから切断します。
