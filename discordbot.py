@@ -165,7 +165,7 @@ async def on_message(message):
                     message.guild.voice_client.play(source)
                 else:
                     await message.channel.send('100文字以上は読み上げできません。')
-    await client.process_commands(message)
+    await app_commands(message)
 
 @client.event
 async def on_voice_state_update(member, before, after):
