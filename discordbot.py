@@ -14,7 +14,8 @@ lang = os.getenv('DISCORD_BOT_LANG', default='ja')
 token = os.environ['DISCORD_BOT_TOKEN']
 intents = discord.Intents.default()
 intents.message_content = True
-client = commands.Bot(command_prefix=prefix, intents=intents)
+client = commands.Bot(intents=intents)
+tree = discord.app_commands.CommandTree(client)
 with open('emoji_ja.json', encoding='utf-8') as file:
     emoji_dataset = json.load(file)
 database_url = os.environ.get('DATABASE_URL')
@@ -34,8 +35,11 @@ async def on_guild_remove(guild):
     presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
     await client.change_presence(activity=discord.Game(name=presence))
 
-@client.command()
-async def 接続(ctx):
+@tree.command(
+    name="接続",
+    description="Send Hello world."
+)
+async def connect(ctx:SlashContext):
     if ctx.message.guild:
         if ctx.author.voice is None:
             await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
