@@ -45,7 +45,7 @@ async def 接続(ctx):
                     await ctx.send('接続済みです。')
                 else:
                     await ctx.voice_client.disconnect()
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(1)
                     await ctx.author.voice.channel.connect()
             else:
                 await ctx.author.voice.channel.connect()
@@ -207,7 +207,7 @@ async def on_voice_state_update(member, before, after):
             await client.change_presence(activity=discord.Game(name=presence))
         else:
             if member.guild.voice_client is None:
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(1)
                 await after.channel.connect()
             else:
                 if member.guild.voice_client.channel is after.channel:
@@ -240,9 +240,9 @@ async def on_voice_state_update(member, before, after):
         if member.guild.voice_client:
             if member.guild.voice_client.channel is before.channel:
                 if len(member.guild.voice_client.channel.members) == 1 or member.voice.self_mute:
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(1)
                     await member.guild.voice_client.disconnect()
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(1)
                     await after.channel.connect()
 
 @client.event
