@@ -16,10 +16,10 @@
   ],
   "env": {
     "DISCORD_BOT_TOKEN": {
-            "description": "ボットのトークンを入力します。"
+            "description": "Enter your Discord bot token. ボットのトークンを入力してください。"
     },
     "DISCORD_BOT_PREFIX": {
-            "description": "ボットのプレフィックスを入力します。空欄にすると「🦑」に設定されます。",
+            "description": "Enter your prefix. Set 🦑 as your prefix if you leave it blank. ボットのプレフィックスを入力します。空欄にすると「🦑」に設定されます。",
             "required": false
     }
   },
