@@ -5,12 +5,16 @@ import os
 import traceback
 import urllib.parse
 import re
+# import json
+# import psycopg2
 
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 lang = os.getenv('DISCORD_BOT_LANG', default='ja')
 botname = os.getenv('DISCORD_BOT_NAME', default='Bot')
 token = os.environ['DISCORD_BOT_TOKEN']
 max_len_text = int(os.getenv('DISCORD_BOT_TEXT_LEN', default=40))
+voicevox_key = os.environ['VOICEVOX_KEY']
+voicevox_speaker = os.getenv('VOICEVOX_SPEAKER', default='2')
 
 intents = discord.Intents.all()
 intents.members = True
@@ -32,28 +36,29 @@ async def on_guild_remove(guild):
 @client.command()
 async def c(ctx):
     await delete_command_safety(ctx.message)
-    if ctx.author.voice is None:
-        await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
-        return
+    if ctx.message.guild:
+        if ctx.author.voice is None:
+            await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
+            return
 
-    async def voice_connect(ctx):
-        try:
-            await ctx.author.voice.channel.connect(timeout=5)
-        except asyncio.TimeoutError:
-            await ctx.send('接続に失敗しました。')
+        async def voice_connect(ctx):
+            try:
+                await ctx.author.voice.channel.connect(timeout=5)
+            except asyncio.TimeoutError:
+                await ctx.send('接続に失敗しました。')
 
-    if ctx.guild.voice_client is None:
-        await voice_connect(ctx)
-        await asyncio.sleep(1.0)
-        await speak(ctx.guild.voice_client, f'{botname}が入室しました。')
-    elif ctx.author.voice.channel != ctx.guild.voice_client.channel:
-        await ctx.voice_client.disconnect()
-        await asyncio.sleep(0.5)
-        await voice_connect(ctx)
-        await asyncio.sleep(1.0)
-        await speak(ctx.guild.voice_client, f'{botname}が入室しました。')
-    else:
-        await ctx.send('接続済みです。')
+        if ctx.guild.voice_client is None:
+            await voice_connect(ctx)
+            await asyncio.sleep(1.0)
+            await speak(ctx.guild.voice_client, f'{botname}が入室しました。')
+        elif ctx.author.voice.channel != ctx.guild.voice_client.channel:
+            await ctx.voice_client.disconnect()
+            await asyncio.sleep(0.5)
+            await voice_connect(ctx)
+            await asyncio.sleep(1.0)
+            await speak(ctx.guild.voice_client, f'{botname}が入室しました。')
+        else:
+            await ctx.send('接続済みです。')
 
 @client.command()
 async def d(ctx):
@@ -107,11 +112,14 @@ async def on_message(message):
     if text == '、':
         text = ''
 
+    mp3url = f'https://api.su-shiki.com/v2/voicevox/audio/?text={text}&key={voicevox_key}&speaker={voicevox_speaker}&intonationScale=1'
     if len(text) <= 0:
         print('Nothing to read')
     elif len(text) < max_len_text:
         print(f'{text}({len(text)})')
-        await speak(voice_client, text)
+        # await speak(voice_client, text)
+        source = await discord.FFmpegOpusAudio.from_probe(mp3url)
+        message.guild.voice_client.play(source)
     else:
         print(f'Cannot read: {text[:max_len_text]}...({len(text)})')
         await message.channel.send(f'{max_len_text}文字以上は読み上げできません。')
