@@ -12,8 +12,9 @@ botname = os.getenv('DISCORD_BOT_NAME', default='Bot')
 token = os.environ['DISCORD_BOT_TOKEN']
 max_len_text = int(os.getenv('DISCORD_BOT_TEXT_LEN', default=40))
 
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 intents.members = True
+intents.messages = True
 client = commands.Bot(command_prefix=prefix, intents=intents)
 
 @client.event
