@@ -5,15 +5,15 @@ import os
 import traceback
 import urllib.parse
 import re
-import json
-import psycopg2
+# import json
+# import psycopg2
 
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 lang = os.getenv('DISCORD_BOT_LANG', default='ja')
 botname = os.getenv('DISCORD_BOT_NAME', default='Bot')
 token = os.environ['DISCORD_BOT_TOKEN']
 max_len_text = int(os.getenv('DISCORD_BOT_TEXT_LEN', default=40))
-voicevox_key = os.environ['VOICEVOX_KEY']	
+voicevox_key = os.environ['VOICEVOX_KEY']
 voicevox_speaker = os.getenv('VOICEVOX_SPEAKER', default='2')
 
 intents = discord.Intents.all()
@@ -119,7 +119,7 @@ async def on_message(message):
         print(f'{text}({len(text)})')
         # await speak(voice_client, text)
         source = await discord.FFmpegOpusAudio.from_probe(mp3url)
-        
+        message.guild.voice_client.play(source)
     else:
         print(f'Cannot read: {text[:max_len_text]}...({len(text)})')
         await message.channel.send(f'{max_len_text}文字以上は読み上げできません。')
